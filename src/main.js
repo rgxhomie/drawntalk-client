@@ -11,6 +11,6 @@ const app = createApp(App);
 app.use(router);
 app.use(Notifications);
 app.config.globalProperties.$bus = $bus;
-app.config.globalProperties.$HOST_BASE_URL = 'http://localhost:3000';
+app.config.globalProperties.$HOST_BASE_URL = 'https://drawntalk.onrender.com';
 
 app.mount('#app');
