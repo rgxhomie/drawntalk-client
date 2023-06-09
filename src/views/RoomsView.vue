@@ -56,7 +56,7 @@ export default {
         }
       })
       .then(response => response.json())
-      .then(data => this.rooms = data.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt)))
+      .then(data => this.rooms = data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)))
       .catch(error => {
         console.error(`Error while loading rooms.`, error);
         this.isError = true;

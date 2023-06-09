@@ -30,7 +30,7 @@ export default {
   data() {
     return {
       roomData: {
-          roomName: '',
+          roomName: 'Change Me!',
           roomDescription: 'Regular room.',
           cardColor: '#000000'
       }

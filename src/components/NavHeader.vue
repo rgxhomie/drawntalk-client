@@ -6,6 +6,10 @@
           <app-logo></app-logo>
         </div>
         <div class="col text-end">
+          <router-link to="/rooms">
+            <button class="btn btn-link">Rooms</button>
+          </router-link>
+          <span style="color: white">|</span>
           <router-link to="/contact">
             <button class="btn btn-link">Contact Me</button>
           </router-link>

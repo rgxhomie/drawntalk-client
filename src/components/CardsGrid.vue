@@ -1,6 +1,17 @@
 <template>
   <div class="container">
     <div class="row">
+
+      <div class="col-md-4 text-center room-dutton_card">
+        <div class="add-room-btn_container">
+          <router-link to="/create/room">
+            <button class="add-room-btn">
+              <p class="add-room-btn_text">+</p>
+            </button>
+          </router-link>
+        </div>
+      </div>
+
       <div v-for="(room, index) in rooms" :key="index" class="col-md-4" @click.prevent="$router.push(`/room/${room._id}`)">
         <div class="card my-3">
           <div class="card-header" :style="{'background-color': room.cardColor}">
@@ -11,15 +22,7 @@
           </div>
         </div>
       </div>
-      <div class="col-md-4 text-center room-dutton_card">
-        <div class="add-room-btn_container">
-          <router-link to="/create/room">
-            <button class="add-room-btn">
-              <p class="add-room-btn_text">+</p>
-            </button>
-          </router-link>
-        </div>
-      </div>
+      
     </div>
   </div>
 </template>
