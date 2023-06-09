@@ -184,6 +184,9 @@ export default {
         addSocketListeners() {
             const socket = this.socket;
 
+            // Reconnect to room in case server goes down or restarts
+            socket.on('roomJoinRequested', () => this.socket.emit('joinRoom', this.$route.params.roomid));
+
             socket.on('currentCanvasState', data => {
                 const ctx = this.ctx;
 
