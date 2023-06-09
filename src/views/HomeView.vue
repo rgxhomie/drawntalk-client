@@ -17,7 +17,14 @@
 <script>
 
 export default {
-  
+  methods: {
+    warUpServer() {
+      fetch(`${this.$HOST_BASE_URL}/warmup`);
+    }
+  },
+  mounted() {
+    
+  }
 }
 </script>
 

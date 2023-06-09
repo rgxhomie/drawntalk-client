@@ -45,7 +45,7 @@
             class="form-control"
             id="brush-width"
             min="1"
-            max="100"
+            max="20"
             v-model="brushWidth"
             v-if="isBrushWidthSlider"
         >
@@ -135,6 +135,7 @@ export default {
             })
             .then(response => response.json())
             .then(() => {
+                this.isEditModeOn = false;
                 this.$notify({
                     title: "Saved!",
                     text: "Changes applied.",
@@ -149,11 +150,10 @@ export default {
                     type: 'error'
                 });
             })
-            .finally(() => this.isEditModeOn = false);
         },
 
         async deleteRoom() {
-            const isDeletedSuccess = await fetch(`${this.$HOST_BASE_URL}/rooms/delete/${this.$route.params.roomid}`, {
+            await fetch(`${this.$HOST_BASE_URL}/rooms/delete/${this.$route.params.roomid}`, {
                 method: 'DELETE',
                 cache: 'no-cache',
                 headers: {
@@ -163,14 +163,18 @@ export default {
             })
             .then(response => response.json())
             .then(data => {
-                if(data._id) return true;
+                if(data._id) this.$router.push('/rooms');
+                else throw new Error(`Room deletion error`);
             })
             .catch((error) => {
                 console.log(`Couldn't delete room. Error:`, error);
+                this.$notify({
+                    title: 'Error',
+                    text: `Couldn't delete room. Pic is just too good.`,
+                    type: 'error'
+                });
                 return false;
             });
-
-            if (isDeletedSuccess) this.$router.push('/rooms');
         },
 
         async hardSaveCanvas() {
