@@ -21,8 +21,8 @@ export default {
             startCoords: {
                 x: 0,
                 y: 0
-            }
-
+            },
+            canvasUrlHistory: []
         }
     },
     methods: {
@@ -50,6 +50,11 @@ export default {
                 this.isBrushDrawing = true;
                 this.startCoords.x = event.offsetX;
                 this.startCoords.y = event.offsetY;
+
+                if (this.canvasUrlHistory.length > 5) {
+                    this.canvasUrlHistory.shift();
+                }
+                this.canvasUrlHistory.push(this.canvas.toDataURL());
             });
             document.addEventListener('mouseup', () => {
                 if (this.isBrushDrawing) {
@@ -81,6 +86,24 @@ export default {
 
                 this.startCoords.x = event.offsetX;
                 this.startCoords.y = event.offsetY;
+            });
+
+            document.addEventListener('keydown', (event) => {
+                if (event.ctrlKey && event.key === 'z') {
+                    event.preventDefault();
+
+                    const savedState = this.canvasUrlHistory.pop();
+
+                    if(savedState) {
+                        const stateImg = new Image();
+                        stateImg.src = savedState;
+
+                        stateImg.onload = () => {
+                            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                            this.ctx.drawImage(stateImg, 0, 0);
+                        };
+                    }
+                }
             });
         },
 
@@ -177,8 +200,6 @@ export default {
 
         initializeSocketConnection() {
             this.socket = io(this.$HOST_BASE_URL);
-
-            this.socket.emit('joinRoom', this.$route.params.roomid);
         },
 
         addSocketListeners() {

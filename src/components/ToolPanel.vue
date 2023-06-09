@@ -8,6 +8,9 @@
         <input type="button" class="form-control btn btn-success" value="Hard Save" id="save-canvas" @click.prevent="hardSaveCanvas">
       </div>
       <div class="divider">Brush Settings</div>
+      <div class="eraser input-group-sm" style="margin: auto; text-align: center;">
+        <button class="btn btn-light" @click.prevent="changeCurrentColor('#ffffff')" style="min-width: 70px;">Eraser</button>
+      </div>
       <div class="input-group-sm">
         <label for="color">Color <button class="add-to-fav-button" @click.prevent="addColorToFav">Add to favourite</button></label>
         <input type="color" class="form-control" id="brush-color" v-model="brushColor">
