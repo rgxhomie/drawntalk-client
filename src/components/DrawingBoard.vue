@@ -209,6 +209,7 @@ export default {
 
         initializeSocketConnection() {
             this.socket = io(this.$HOST_BASE_URL);
+            this.socket.emit('uniqueJoin', this.$route.params.roomid);
         },
 
         addSocketListeners() {
