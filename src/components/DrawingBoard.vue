@@ -1,6 +1,6 @@
 <template>
     <div class="flex-grow-1">
-        <canvas id="canvas"></canvas>
+        <canvas :id="`canvas-${$route.params.roomid}`"></canvas>
     </div>  
 </template>
 
@@ -22,12 +22,13 @@ export default {
                 x: 0,
                 y: 0
             },
-            canvasUrlHistory: []
+            canvasUrlHistory: [],
+            userRoomId: undefined
         }
     },
     methods: {
         initializeCanvas() {
-            const canvas = document.getElementById('canvas');
+            const canvas = document.getElementById(`canvas-${this.$route.params.roomid}`);
 
             canvas.width = window.innerWidth - canvas.offsetLeft;
             canvas.height = window.innerHeight - canvas.offsetTop;
@@ -42,7 +43,7 @@ export default {
                 image.onload = () => {
                     this.ctx.drawImage(image, 0, 0);
                 };
-            } 
+            }
         },
 
         addCanvasListeners() {
@@ -56,6 +57,7 @@ export default {
                 }
                 this.canvasUrlHistory.push(this.canvas.toDataURL());
             });
+
             document.addEventListener('mouseup', () => {
                 if (this.isBrushDrawing) {
                     this.isBrushDrawing = false;
@@ -73,13 +75,13 @@ export default {
                     this.ctx.stroke();
 
                     const drawData = {
-                        to: this.$route.params.roomid,
-                        x1: this.startCoords.x,
-                        y1: this.startCoords.y,
-                        x2: event.offsetX,
-                        y2: event.offsetY,
-                        color: this.brushColor,
-                        lineWidth: this.brushWidth
+                        to          : this.$route.params.roomid,
+                        x1          : this.startCoords.x,
+                        y1          : this.startCoords.y,
+                        x2          : event.offsetX,
+                        y2          : event.offsetY,
+                        color       : this.brushColor,
+                        lineWidth   : this.brushWidth
                     }
                     this.socket.emit('draw', drawData);
                 }
@@ -101,6 +103,13 @@ export default {
                         stateImg.onload = () => {
                             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
                             this.ctx.drawImage(stateImg, 0, 0);
+
+                            const revertState = {
+                                to: this.$route.params.roomid,
+                                state: savedState
+                            };
+
+                            this.socket.emit('revertTo', revertState);
                         };
                     }
                 }
@@ -239,6 +248,15 @@ export default {
                 ctx.beginPath();
                 ctx.strokeStyle = this.brushColor;
                 ctx.lineWidth = this.brushWidth;
+            });
+
+            socket.on('revertTo', state => {
+                const revertedState = new Image();
+                revertedState.src = state;
+
+                this.canvas.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+                this.ctx.drawImage(revertedState, 0, 0);
             });
 
             socket.on('clearCanvas', () => {
