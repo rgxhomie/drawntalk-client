@@ -41,7 +41,7 @@ export default {
 
                 image.src = this.dataUrl;
                 image.onload = () => {
-                    this.ctx.drawImage(image, 0, 0);
+                    this.ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
                 };
             }
         },
