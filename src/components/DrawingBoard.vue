@@ -1,6 +1,6 @@
 <template>
     <div class="flex-grow-1">
-        <canvas :id="`canvas-${$route.params.roomid}`"></canvas>
+        <canvas class="canvas_style" :id="`canvas-${$route.params.roomid}`"></canvas>
     </div>  
 </template>
 
@@ -284,7 +284,7 @@ export default {
 </script>
 
 <style scoped>
-#canvas {
+.canvas_style {
     background-color: #fff;
     cursor: crosshair;
 }
